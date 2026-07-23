@@ -1,37 +1,95 @@
 # Isaac Emote Wheel Fix
 
-这是面向 Steam 原版《The Binding of Isaac: Repentance+》J460 的实验性 Windows 原生修复。目标是在不拦截人物移动、射击或网络输入的情况下，让表情轮使用右摇杆选择方向。
+[![build](https://github.com/Lantano-17304/isaac-emote-wheel-fix/actions/workflows/build.yml/badge.svg)](https://github.com/Lantano-17304/isaac-emote-wheel-fix/actions/workflows/build.yml)
+[![release](https://img.shields.io/github/v/release/Lantano-17304/isaac-emote-wheel-fix?include_prereleases)](https://github.com/Lantano-17304/isaac-emote-wheel-fix/releases)
+[![license](https://img.shields.io/github/license/Lantano-17304/isaac-emote-wheel-fix)](LICENSE)
 
-## 支持范围
+《The Binding of Isaac: Repentance+》联机表情轮右摇杆修复。
 
+在不禁止人物移动、不修改网络输入的情况下，将表情轮的方向选择从左摇杆分离到右摇杆：
+
+| 输入 | 效果 |
+| --- | --- |
+| R3 | 打开表情轮 |
+| 右摇杆 | 选择表情 |
+| A 或 R3 | 确认并通过游戏原生逻辑发送 |
+| 左摇杆 | 始终只控制人物移动 |
+
+表情轮开启期间，右摇杆仍保留游戏原有的射击输入。
+
+> [!WARNING]
+> 当前版本是仅面向 J460 的 **Pre-release**。请先阅读下面的兼容范围，并只从本仓库的 Releases 页面下载。
+
+## 下载
+
+前往 [v0.1.0-pre.3 Release](https://github.com/Lantano-17304/isaac-emote-wheel-fix/releases/tag/v0.1.0-pre.3) 下载：
+
+`IsaacEmoteWheelFix-0.1.0-pre.3-j460.zip`
+
+不要下载 GitHub 自动生成的 “Source code” 压缩包作为安装包；它只包含源码。
+
+当前安装包 SHA-256：
+
+```text
+BE89B4A6E136A20F2EC407C039E08DA6368ED4A626AFBC598A06F76D7213325E
+```
+
+## 兼容范围
+
+当前已验证环境：
+
+- Steam 原版《The Binding of Isaac: Repentance+》
+- 游戏版本 `1.9.7.17.J460`
+- `isaac-ng.exe` 为 PE32/x86
+- 已验证 EXE SHA-256：
+  `3BDFC8BAE0DC7E334B76009D0AD45DFBB16EE5F00C06FFBC3A0094E34D44616B`
 - Windows 10/11 64 位
-- Steam 原版当前 J460，游戏进程为 PE32/x86
 - Xbox/XInput 控制器
-- 不支持其他注入器、Steam Deck、Wine/Proton 或旧版 Windows
+- 游戏目录中没有其他同名代理 DLL 或注入器
 
-本项目目前必须以 **Pre-release** 发布。Steam 原版 J460 已确认会加载游戏根目录的 `userenv.dll`，且原版 EXE 的轮盘签名唯一、结构验证通过。正式稳定版仍需完成输入与联机测试。
+目前不支持 Steam Deck、Wine/Proton、旧版 Windows、非 XInput 控制器或存在其他游戏目录注入链的环境。
 
-## 安装流程
+游戏更新后，EXE 哈希授权会自动失效，不会把旧补丁强行应用到新版本。
 
-1. 将整个 `IsaacEmoteWheelFix` 文件夹放到游戏目录中，不要手工复制或重命名 `payload` 内的 DLL。
-2. 确认游戏已完全退出。
-3. 运行 `IsaacEmoteFixManager.exe`，点击“安装并启用修复”，并同意仅本次文件部署所需的 UAC。
-4. 已验证的 Steam 原版 J460 会一次完成安装和哈希授权，下次启动直接生效。
-5. 对未知哈希，管理器只安装安全诊断：通过 Steam 启动并正常退出一次，再点击同一个“安装并启用修复”按钮；只有签名唯一且上下文验证通过时才会启用。
-6. 启动游戏验证输入。
+## 安装
 
-未知 EXE 哈希默认只诊断，不修改游戏代码。兼容授权绑定完整 SHA-256；游戏更新后自动失效。
+1. 完全退出游戏。
+2. 下载 Release 安装包并解压。
+3. 将整个 `IsaacEmoteWheelFix` 文件夹放进游戏目录。默认目录通常为：
 
-## 实际修改
+   ```text
+   C:\Program Files (x86)\Steam\steamapps\common\The Binding of Isaac Rebirth
+   ```
 
-Hook 在当前进程的 `.text` 中扫描并验证 J460 `EmoteWheel::Update` 的唯一上下文。启用后只把轮盘调用原生摇杆向量读取器时的组参数从 `0`（左摇杆）改为 `1`（右摇杆）。修改只存在于游戏进程内存中。
+4. 运行 `IsaacEmoteWheelFix\IsaacEmoteFixManager.exe`。
+5. 点击“安装并启用修复”，根据提示允许本次文件部署所需的管理员权限。
+6. 通过 Steam 启动游戏并测试表情轮。
 
-- R3 打开与 A/R3 确认继续使用游戏原生逻辑。
-- 左摇杆、人物移动、射击动作和网络输入均不挂接。
-- 轮盘期间右摇杆继续产生原生射击输入。
-- 公开版诊断模式不安装 detour，也不轮询 XInput。
+不要手工复制、移动或重命名 `payload` 中的 DLL。
 
-## 状态文件
+### 管理器按钮
+
+- **刷新**：重新检查游戏版本、进程和安装状态。
+- **安装并启用修复**：安装诊断组件；对已验证的 J460 同时启用修复。
+- **暂停修复**：保留文件，但切回不安装运行时补丁的诊断模式。
+- **卸载**：逐个移除由本管理器安装且哈希仍匹配的文件。
+- **打开日志目录**：打开诊断、配置与安装记录所在目录。
+
+### 未识别的游戏版本
+
+未知 EXE 哈希默认只进入诊断模式，不安装活动补丁：
+
+1. 点击“安装并启用修复”。
+2. 通过 Steam 启动游戏并正常退出一次。
+3. 再次打开管理器并点击同一个按钮。
+
+只有运行时签名唯一且结构校验通过时，管理器才允许为该完整 EXE 哈希启用兼容模式。扫描或校验失败时保持原版输入。
+
+## 卸载与回滚
+
+完全退出游戏，然后在管理器中点击“卸载”。
+
+管理器只会逐个删除安装清单中记录、且哈希仍然匹配的本项目文件。文件被其他程序改动或出现同名冲突时，管理器会拒绝覆盖或删除；它不会递归删除游戏目录。
 
 配置、授权、安装清单和日志位于：
 
@@ -39,30 +97,47 @@ Hook 在当前进程的 `.text` 中扫描并验证 J460 `EmoteWheel::Update` 的
 %LOCALAPPDATA%\IsaacEmoteWheelFix
 ```
 
-游戏目录只部署本项目的 `userenv.dll` 和 `emote_input_hook.dll`。发现未知同名 DLL 时管理器会拒绝覆盖。游戏运行期间管理器只允许查看状态和日志。
+## 工作原理与安全边界
 
-## 卸载
+游戏会从根目录加载本项目的 `userenv.dll` 转发代理。代理继续调用 Windows 系统 `userenv.dll`，并在 loader lock 释放后加载 `emote_input_hook.dll`。
 
-完全退出游戏，在管理器中点击“卸载”。管理器只删除哈希与安装清单一致的两个明确 DLL；文件被其他程序修改后会拒绝删除。管理器不会递归删除目录。
+Hook 扫描当前进程的 `.text`，要求 J460 表情轮更新路径的签名唯一并通过上下文校验。启用后，它只把表情轮调用原生摇杆向量读取器时的组参数从 `0`（左摇杆）改为 `1`（右摇杆）。修改仅存在于游戏进程内存中。
 
-## 构建
+本项目：
 
-使用 VS 2022 的 Win32 MSVC 工具链：
+- 不修改磁盘上的 `isaac-ng.exe`。
+- 不挂接人物移动、射击动作或网络输入包。
+- 不禁止人物移动，也不使用 Lua 输入拦截。
+- 不轮询或伪造 XInput 状态。
+- 不替换游戏的原生表情发送函数。
+- 签名、结构、哈希或 trampoline 校验失败时不会安装对应 Hook。
+
+由于安装包包含未签名的原生代理 DLL，部分安全软件可能产生误报。请核对下载来源和 SHA-256；有疑问时可以从源码自行构建。
+
+## 构建与测试
+
+需要 Visual Studio 2022 的 Win32 MSVC 工具链和 CMake：
 
 ```powershell
 cmake -S . -B build -A Win32
 cmake --build build --config Release
+ctest --test-dir build -C Release --output-on-failure
 cmake --build build --config Release --target package
 ```
 
-所有可执行产物使用 `/MT` 静态运行库，不要求安装 .NET 或 VC++ Redistributable。
+所有可执行产物使用 `/MT` 静态运行库，普通用户不需要安装 .NET 或 VC++ Redistributable。每次推送也会由 GitHub Actions 执行 Win32 构建、代理转发测试和打包。
 
-## 发布前验证门槛
+## 测试状态
 
-- 在独立 Steam 原版 J460 副本证明原版自然加载根目录代理。
-- 验证系统 `userenv.dll` 转发、重复安装、冲突拒绝和逐文件卸载。
-- 验证左右摇杆、八方向、A/R3、菜单、暂停和控制器重连。
-- 完成至少一次联机会话和 20 次表情发送，检查 crash 与 desync。
-- Windows 10/11 各取得至少一次测试结果。
+- J460 安装、启动和基本功能测试已通过。
+- 左摇杆移动与右摇杆表情选择可以同时工作。
+- R3 打开、A/R3 确认以及轮盘期间继续射击已通过本机测试。
+- GitHub Actions Win32 构建与代理转发测试已通过。
 
-未完成这些门槛前不得标记为稳定版。
+在扩大 Windows、控制器和联机样本，并持续检查 crash/desync 前，本项目会保持 Pre-release。
+
+发现问题时，请在 [Issues](https://github.com/Lantano-17304/isaac-emote-wheel-fix/issues) 中附上游戏版本、EXE SHA-256、控制器型号、复现步骤和日志。发布日志前请先检查并移除个人信息。
+
+## 许可证
+
+[MIT License](LICENSE)
