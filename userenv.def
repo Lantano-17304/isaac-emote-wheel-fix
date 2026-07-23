@@ -1,0 +1,4 @@
+LIBRARY userenv
+EXPORTS
+    GetUserProfileDirectoryA
+    GetUserProfileDirectoryW
