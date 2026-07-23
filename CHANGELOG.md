@@ -5,6 +5,13 @@
 首个公开预发布版本，仅支持 Steam 原版《The Binding of Isaac: Repentance+》
 `1.9.7.17.J460`（Windows 10/11、Xbox/XInput 控制器）。
 
+### 已知限制
+
+- 当前只有 Xbox/XInput 控制器确认可用。
+- 已有反馈表明部分 PlayStation、Nintendo Switch、DirectInput 和其他通用手柄
+  无法被游戏映射到补丁使用的右摇杆组，本版本不保证兼容。
+- 不建议把右摇杆映射成左摇杆；这会重新耦合人物移动和表情选择。
+
 ### 功能
 
 - R3 打开原生联机表情轮。
