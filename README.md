@@ -47,21 +47,7 @@ BE89B4A6E136A20F2EC407C039E08DA6368ED4A626AFBC598A06F76D7213325E
 - Xbox/XInput 控制器
 - 游戏目录中没有其他同名代理 DLL 或注入器
 
-### 已知手柄限制
-
-当前只有 Xbox/XInput 控制器确认可以正常工作。已有反馈表明，部分
-PlayStation、Nintendo Switch、DirectInput 和其他通用手柄无法让表情轮读取到
-正确的右摇杆方向。
-
-Hook 本身不读取或伪造 XInput；它只把游戏原生表情轮读取器使用的摇杆组从左摇杆
-组切换为右摇杆组。非 XInput 手柄经过 Steam Input 或厂商驱动后，不一定会被游戏
-映射到同一个右摇杆组，因此当前版本不保证兼容。
-
-不建议把右摇杆简单映射为左摇杆。这样会让人物移动和表情选择再次共用同一输入，
-无法满足本项目的分离目标。后续兼容需要针对具体控制器后端获取诊断数据并单独验证。
-
-目前不支持 Steam Deck、Wine/Proton、旧版 Windows、非 XInput 控制器或存在其他
-游戏目录注入链的环境。
+目前不支持 Steam Deck、Wine/Proton、旧版 Windows、非 XInput 控制器或存在其他游戏目录注入链的环境。
 
 游戏更新后，EXE 哈希授权会自动失效，不会把旧补丁强行应用到新版本。
 
@@ -144,16 +130,13 @@ cmake --build build --config Release --target package
 ## 测试状态
 
 - J460 安装、启动和基本功能测试已通过。
-- Xbox/XInput 控制器已通过测试；其他控制器目前属于已知不兼容范围。
 - 左摇杆移动与右摇杆表情选择可以同时工作。
 - R3 打开、A/R3 确认以及轮盘期间继续射击已通过本机测试。
 - GitHub Actions Win32 构建与代理转发测试已通过。
 
 在扩大 Windows、控制器和联机样本，并持续检查 crash/desync 前，本项目会保持 Pre-release。
 
-发现问题时，请在 [Issues](https://github.com/Lantano-17304/isaac-emote-wheel-fix/issues)
-中附上游戏版本、EXE SHA-256、控制器品牌与型号、连接方式、Steam Input 是否开启、
-游戏显示的控制器序号、复现步骤和日志。发布日志前请先检查并移除个人信息。
+发现问题时，请在 [Issues](https://github.com/Lantano-17304/isaac-emote-wheel-fix/issues) 中附上游戏版本、EXE SHA-256、控制器型号、复现步骤和日志。发布日志前请先检查并移除个人信息。
 
 ## 许可证
 
